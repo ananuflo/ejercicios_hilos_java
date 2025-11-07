@@ -6,33 +6,22 @@ public class LanzadorHilosNew {
 	
 	public static void main(String[] args) {
 
-		Thread t1 = new Thread(() -> {
+		Thread t = new Thread(() -> {
             synchronized (LOCK) {
-                try { Thread.sleep(2000); } catch (InterruptedException ignored) {}
+                try {
+                    System.out.println(Thread.currentThread().getName() + " esperando...");
+                    LOCK.wait();
+                } catch (InterruptedException ignored) {}
             }
-        }, "t1");
+        }, "tWaiting");
 		
-		Thread t2 = new Thread(() -> {
-	           synchronized (LOCK) {
-	               System.out.println("Bloqueado: " + Thread.currentThread().getName());
-	            }
-	        }, "t2");
-		
-		t1.start();
-        try {
+		t.start();
+		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        t2.start();
-        try {
-			Thread.sleep(50);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        System.out.println(t2.getName() + " -> " + t2.getState());
+		System.out.println(t.getName() + " ---> " + t.getState());
 		
 	}
 
