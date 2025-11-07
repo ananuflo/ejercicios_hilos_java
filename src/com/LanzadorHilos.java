@@ -6,19 +6,11 @@ public class LanzadorHilos {
 	
 	public static void main(String[] args) {
 		
-		Thread t = new Thread(() -> {
-            synchronized (LOCK) {
-                try {
-                    System.out.println(Thread.currentThread().getName() + " esperando...");
-                    LOCK.wait();
-                } catch (InterruptedException ignored) {}
-            }
-        }, "tWaiting");
+		Thread t = new Thread(new Hilo("finalizado"));
         t.start();
         try {
-			Thread.sleep(100);
+			t.join();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         System.out.println(t.getName() + " -> " + t.getState());
