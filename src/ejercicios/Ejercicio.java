@@ -4,31 +4,32 @@ public class Ejercicio {
 
 	public static void main(String[] args) {
 		
-		// En run(), usa un for del 1 al 5.
-		Thread hilo = new Thread(() -> {
-			for (int i = 1; i <= 5; i++) {
-				System.out.println("Soy: " + Thread.currentThread().getName() + ", i: " + i);
-				// En cada iteración imprime el número y llama a Thread.sleep(1000).
+		// Crea un Thread cuyo run() haga sleep(500).
+				Thread hilo = new Thread(() -> {
+					System.out.println("Hilo: " + Thread.currentThread().getName());
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+					}
+				});
+
+				// Antes de start(): muestra t.getState() (debería ser NEW).
+				System.out.println("Estado antes de start(): " + hilo.getState());
+
+				// Tras start(), imprime getState() y isAlive().
+				hilo.start();
+				System.out.println("Estado después de start(): " + hilo.getState());
+				System.out.println("isAlive?: " + hilo.isAlive());
+
+				// Después de join(), verifica que el estado es TERMINATED y isAlive() == false.
 				try {
-					Thread.sleep(1000);
-					// Captura InterruptedException con try/catch.
+					hilo.join();
 				} catch (InterruptedException e) {
 				}
-			}
-		});
+				System.out.println("Estado después de join(): " + hilo.getState());
+				System.out.println("isAlive?: " + hilo.isAlive());
 
-		hilo.start();
-		
-		// Comprueba que el hilo principal puede seguir haciendo otras cosas mientras tanto.
-		for (int i = 0; i < 10; i++) {
-			System.out.println("Soy: " + Thread.currentThread().getName() + ", i: " + i);
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
 			}
-		}
-
-	}
 			
 	}
 
