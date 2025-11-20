@@ -4,29 +4,32 @@ public class Ejercicio {
 
 	public static void main(String[] args) {
 		
-		// Crea un hilo que haga sleep(3000) para simular tarea larga.
+		// En el hilo, usa un bucle while (!Thread.currentThread().isInterrupted()).
 				Thread t = new Thread(() -> {
+					int contador = 0;
+
+					// Dentro del bucle, imprime un contador y haz sleep(500).
 					try {
-						Thread.sleep(3000);
+						while (!Thread.currentThread().isInterrupted()) {
+							contador++;
+							System.out.println("Contador: " + contador);
+							Thread.sleep(500);
+						}
+						// Maneja InterruptedException terminando el hilo con un mensaje claro.
 					} catch (InterruptedException e) {
+						System.out.println("Se interrumpió el hilo :(");
 					}
-					System.out.println("FIN");
+					System.out.println("El hilo finalizó");
 				});
 
-				// En el main, tras t.start(), usa t.join(1000).
+				// En el main, tras start(), espera con sleep(2000) y luego llama a
+				// t.interrupt().
+				t.start();
 				try {
-					t.start();
-					t.join(1000);
-					// Después del join con timeout, comprueba t.isAlive() para saber si terminó.
-					// Muestra mensajes distintos según haya terminado o haya expirado el tiempo.
-					if (t.isAlive()) {
-						System.out.println("Está vivo");
-					} else {
-						System.out.println("Terminó");
-					}
+					Thread.sleep(2000);
+					t.interrupt();
 				} catch (InterruptedException e) {
 				}
-
 			}
 			
 	}
