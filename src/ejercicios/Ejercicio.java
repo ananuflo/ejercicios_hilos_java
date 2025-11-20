@@ -3,23 +3,33 @@ package ejercicios;
 public class Ejercicio {
 
 	public static void main(String[] args) {
+		
+		// En run(), usa un for del 1 al 5.
+		Thread hilo = new Thread(() -> {
+			for (int i = 1; i <= 5; i++) {
+				System.out.println("Soy: " + Thread.currentThread().getName() + ", i: " + i);
+				// En cada iteración imprime el número y llama a Thread.sleep(1000).
+				try {
+					Thread.sleep(1000);
+					// Captura InterruptedException con try/catch.
+				} catch (InterruptedException e) {
+				}
+			}
+		});
 
-		// En el main, crea un Thread con una lambda.
-				// Dentro de la lambda, usa Thread.currentThread().getName() para mostrar el
-				// nombre.
-				Runnable ej2 = () -> System.out.println("Ejecutando: " + Thread.currentThread().getName());
-				Thread hilo = new Thread(ej2);
+		hilo.start();
+		
+		// Comprueba que el hilo principal puede seguir haciendo otras cosas mientras tanto.
+		for (int i = 0; i < 10; i++) {
+			System.out.println("Soy: " + Thread.currentThread().getName() + ", i: " + i);
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+			}
+		}
 
-				// Antes de start(), llama a setName("Hilo-Usuario").
-				hilo.setName("Hilo-Usuario");
-
-				hilo.start();
-
-				// Repite con varios hilos con nombres distintos.
-				Thread hilo2 = new Thread(ej2);
-				hilo2.setName("Otro-Usuario");
-				hilo2.start();
-			}		
+	}
+			
 	}
 
 
