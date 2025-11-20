@@ -4,30 +4,31 @@ public class Ejercicio {
 
 	public static void main(String[] args) {
 		
-		// Crea un Thread cuyo run() haga sleep(500).
-				Thread hilo = new Thread(() -> {
-					System.out.println("Hilo: " + Thread.currentThread().getName());
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
+		// Crea dos Thread con lambdas que impriman varios mensajes.
+				Thread a = new Thread(() -> {
+					for (int i = 0; i < 5; i++) {
+						System.out.println("Hola desde hilo A");
 					}
+					System.out.println("Con el ID: " + Thread.currentThread().getId());
 				});
 
-				// Antes de start(): muestra t.getState() (debería ser NEW).
-				System.out.println("Estado antes de start(): " + hilo.getState());
+				Thread b = new Thread(() -> {
+					for (int i = 0; i < 5; i++) {
+						System.out.println("Hola desde hilo B");
+					}
+					System.out.println("Con el ID: " + Thread.currentThread().getId());
+				});
 
-				// Tras start(), imprime getState() y isAlive().
-				hilo.start();
-				System.out.println("Estado después de start(): " + hilo.getState());
-				System.out.println("isAlive?: " + hilo.isAlive());
+				// En el main, arranca primero A con a.start().
+				a.start();
 
-				// Después de join(), verifica que el estado es TERMINATED y isAlive() == false.
+				// Haz a.join() antes de b.start().
 				try {
-					hilo.join();
+					a.join();
 				} catch (InterruptedException e) {
 				}
-				System.out.println("Estado después de join(): " + hilo.getState());
-				System.out.println("isAlive?: " + hilo.isAlive());
+				b.start();
+				// Comprueba que la salida de B no comienza hasta que A finaliza.
 
 			}
 			
