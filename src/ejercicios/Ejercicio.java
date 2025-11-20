@@ -4,31 +4,28 @@ public class Ejercicio {
 
 	public static void main(String[] args) {
 		
-		// Crea dos Thread con lambdas que impriman varios mensajes.
-				Thread a = new Thread(() -> {
-					for (int i = 0; i < 5; i++) {
-						System.out.println("Hola desde hilo A");
+		// Crea un hilo que haga sleep(3000) para simular tarea larga.
+				Thread t = new Thread(() -> {
+					try {
+						Thread.sleep(3000);
+					} catch (InterruptedException e) {
 					}
-					System.out.println("Con el ID: " + Thread.currentThread().getId());
+					System.out.println("FIN");
 				});
 
-				Thread b = new Thread(() -> {
-					for (int i = 0; i < 5; i++) {
-						System.out.println("Hola desde hilo B");
-					}
-					System.out.println("Con el ID: " + Thread.currentThread().getId());
-				});
-
-				// En el main, arranca primero A con a.start().
-				a.start();
-
-				// Haz a.join() antes de b.start().
+				// En el main, tras t.start(), usa t.join(1000).
 				try {
-					a.join();
+					t.start();
+					t.join(1000);
+					// Después del join con timeout, comprueba t.isAlive() para saber si terminó.
+					// Muestra mensajes distintos según haya terminado o haya expirado el tiempo.
+					if (t.isAlive()) {
+						System.out.println("Está vivo");
+					} else {
+						System.out.println("Terminó");
+					}
 				} catch (InterruptedException e) {
 				}
-				b.start();
-				// Comprueba que la salida de B no comienza hasta que A finaliza.
 
 			}
 			
